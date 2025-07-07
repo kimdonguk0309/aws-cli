@@ -1,3 +1,28 @@
 aws ec2 create-vpc --cidr-block 10.0.0.0/16 --tag-specifications ResourceTypr=vpc,Tags=[{Key=Name,Value=MyVpc}]
 
 aws ec2 create-subnet --vpc-id vpc-xxx --cidr-block 10.0.0.0/24 --tag-specifications ResourceTypr=subnet,Tags=[{Key=Name,Value=MySubent}]
+
+###############################
+#!/bin/bash
+
+# VPC 생성
+echo "Creating VPC..."
+VPC_ID=$(aws ec2 create-vpc \
+  --cidr-block 10.0.0.0/16 \
+  --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=MyVpc}]' \
+  --query 'Vpc.VpcId' \
+  --output text)
+
+echo "VPC created with ID: $VPC_ID"
+
+# Subnet 생성
+echo "Creating Subnet..."
+SUBNET_ID=$(aws ec2 create-subnet \
+  --vpc-id "$VPC_ID" \
+  --cidr-block 10.0.0.0/24 \
+  --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=MySubnet}]' \
+  --query 'Subnet.SubnetId' \
+  --output text)
+
+echo "Subnet created with ID: $SUBNET_ID"
+##############################
